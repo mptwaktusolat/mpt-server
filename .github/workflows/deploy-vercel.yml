@@ -3,13 +3,14 @@ on: [push]
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    env:
+      VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+      VERCEL_ORG_ID: ${{ secrets.ORG_ID }}
+      VERCEL_PROJECT_ID: ${{ secrets.PROJECT_ID }}
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
           node-version: 16
-      - run: npx vercel --prod
-        env:
-          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
-          VERCEL_ORG_ID: ${{ secrets.ORG_ID }}
-          VERCEL_PROJECT_ID: ${{ secrets.PROJECT_ID }}
+      - run: npx vercel --prod --token ${{ env.VERCEL_TOKEN }} >> $GITHUB_STEP_SUMMARY
+
